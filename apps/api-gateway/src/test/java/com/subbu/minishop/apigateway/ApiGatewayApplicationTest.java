@@ -119,7 +119,7 @@ class ApiGatewayApplicationTest {
                 .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "PUT")
                 .header(
                         HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS,
-                        "Content-Type, Authorization"
+                        "Content-Type, Authorization, Accept"
                 )
                 .exchange()
                 .expectStatus().isOk()
@@ -133,7 +133,10 @@ class ApiGatewayApplicationTest {
                 )
                 .expectHeader().valueEquals(
                         HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS,
-                        "Content-Type, Authorization"
+                        "Content-Type, Authorization, Accept"
+                )
+                .expectHeader().doesNotExist(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS
                 );
     }
 
