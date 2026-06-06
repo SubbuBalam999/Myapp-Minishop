@@ -15,6 +15,11 @@ The destinations can be overridden with:
 | --- | --- |
 | `USER_SERVICE_URL` | `http://localhost:8081` |
 | `PRODUCT_SERVICE_URL` | `http://localhost:8082` |
+| `FRONTEND_URL` | `http://localhost:5173` |
+
+The gateway allows the configured frontend origin to call `/api/**` using
+`GET`, `POST`, `PUT`, `DELETE`, and `OPTIONS` with `Content-Type` and
+`Authorization` headers.
 
 ## Prerequisites
 

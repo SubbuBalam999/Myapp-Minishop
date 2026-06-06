@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -54,8 +56,13 @@ class ApiGatewayApplicationTest {
     void routesUserRequests() {
         client().get()
                 .uri("/api/users/1")
+                .header(HttpHeaders.ORIGIN, "http://localhost:5173")
                 .exchange()
                 .expectStatus().isOk()
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "http://localhost:5173"
+                )
                 .expectBody()
                 .jsonPath("$.name").isEqualTo("Ada Lovelace");
     }
@@ -64,8 +71,13 @@ class ApiGatewayApplicationTest {
     void routesProductRequests() {
         client().get()
                 .uri("/api/products/1")
+                .header(HttpHeaders.ORIGIN, "http://localhost:5173")
                 .exchange()
                 .expectStatus().isOk()
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "http://localhost:5173"
+                )
                 .expectBody()
                 .jsonPath("$.name").isEqualTo("Mechanical Keyboard");
     }
@@ -97,6 +109,55 @@ class ApiGatewayApplicationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentTypeCompatibleWith("text/plain");
+    }
+
+    @Test
+    void allowsFrontendCorsPreflightForUsers() {
+        client().method(HttpMethod.OPTIONS)
+                .uri("/api/users")
+                .header(HttpHeaders.ORIGIN, "http://localhost:5173")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "PUT")
+                .header(
+                        HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS,
+                        "Content-Type, Authorization"
+                )
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "http://localhost:5173"
+                )
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS,
+                        "GET,POST,PUT,DELETE,OPTIONS"
+                )
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS,
+                        "Content-Type, Authorization"
+                );
+    }
+
+    @Test
+    void allowsFrontendCorsPreflightForProducts() {
+        client().method(HttpMethod.OPTIONS)
+                .uri("/api/products")
+                .header(HttpHeaders.ORIGIN, "http://localhost:5173")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "DELETE")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, "Authorization")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "http://localhost:5173"
+                )
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS,
+                        "GET,POST,PUT,DELETE,OPTIONS"
+                )
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS,
+                        "Authorization"
+                );
     }
 
     private WebTestClient client() {
