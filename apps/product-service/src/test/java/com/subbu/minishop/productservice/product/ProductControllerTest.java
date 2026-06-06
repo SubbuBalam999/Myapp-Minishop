@@ -28,7 +28,7 @@ class ProductControllerTest {
     void setUp() {
         productRepository = mock(ProductRepository.class);
         mockMvc = standaloneSetup(
-                new ProductController(productRepository),
+                new ProductController(new ProductService(productRepository)),
                 new HealthController()
         ).build();
     }
