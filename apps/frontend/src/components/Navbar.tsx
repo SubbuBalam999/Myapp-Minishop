@@ -4,6 +4,8 @@ const links = [
   { to: "/", label: "Home" },
   { to: "/users", label: "Users" },
   { to: "/products", label: "Products" },
+  { to: "/cart", label: "Cart" },
+  { to: "/orders", label: "Orders" },
 ];
 
 function Navbar() {

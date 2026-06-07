@@ -23,6 +23,8 @@ class ApiGatewayApplicationTest {
 
     private static HttpServer userService;
     private static HttpServer productService;
+    private static HttpServer cartService;
+    private static HttpServer orderService;
 
     @LocalServerPort
     private int port;
@@ -38,18 +40,28 @@ class ApiGatewayApplicationTest {
         productService = startServer("/api/products/1", """
                 {"id":1,"name":"Mechanical Keyboard","price":89.99}
                 """);
+        cartService = startServer("/api/cart/1", """
+                [{"id":1,"userId":1,"productId":1,"quantity":2}]
+                """);
+        orderService = startServer("/api/orders/1", """
+                {"id":1,"userId":1,"totalAmount":1999.98,"status":"CREATED"}
+                """);
     }
 
     @AfterAll
     static void stopDownstreamServices() {
         userService.stop(0);
         productService.stop(0);
+        cartService.stop(0);
+        orderService.stop(0);
     }
 
     @DynamicPropertySource
     static void configureDownstreamServices(DynamicPropertyRegistry registry) {
         registry.add("USER_SERVICE_URL", () -> "http://localhost:" + userService.getAddress().getPort());
         registry.add("PRODUCT_SERVICE_URL", () -> "http://localhost:" + productService.getAddress().getPort());
+        registry.add("CART_SERVICE_URL", () -> "http://localhost:" + cartService.getAddress().getPort());
+        registry.add("ORDER_SERVICE_URL", () -> "http://localhost:" + orderService.getAddress().getPort());
     }
 
     @Test
@@ -80,6 +92,36 @@ class ApiGatewayApplicationTest {
                 )
                 .expectBody()
                 .jsonPath("$.name").isEqualTo("Mechanical Keyboard");
+    }
+
+    @Test
+    void routesCartRequests() {
+        client().get()
+                .uri("/api/cart/1")
+                .header(HttpHeaders.ORIGIN, "http://localhost:5173")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "http://localhost:5173"
+                )
+                .expectBody()
+                .jsonPath("$[0].quantity").isEqualTo(2);
+    }
+
+    @Test
+    void routesOrderRequests() {
+        client().get()
+                .uri("/api/orders/1")
+                .header(HttpHeaders.ORIGIN, "http://localhost:5173")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "http://localhost:5173"
+                )
+                .expectBody()
+                .jsonPath("$.status").isEqualTo("CREATED");
     }
 
     @Test

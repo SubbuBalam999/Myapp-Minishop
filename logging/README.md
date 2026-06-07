@@ -6,6 +6,8 @@ Grafana for querying logs. Promtail collects only these Compose services:
 - `api-gateway`
 - `user-service`
 - `product-service`
+- `cart-service`
+- `order-service`
 
 ## Start logging
 
@@ -24,7 +26,8 @@ automatically provisioned **Loki** datasource, then run:
 ```
 
 Use the same query with `user-service` or `product-service` to inspect those
-logs. To view all collected MiniShop logs:
+logs. Use `cart-service` or `order-service` for commerce workflow logs. To view
+all collected MiniShop logs:
 
 ```logql
 {job="minishop"}

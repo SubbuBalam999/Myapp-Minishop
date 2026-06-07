@@ -7,7 +7,7 @@ function HomePage() {
         <div className="eyebrow">MiniShop Platform</div>
         <h1>A small storefront built for big engineering lessons.</h1>
         <p className="hero-copy">
-          Explore the users and products served by the MiniShop Spring Boot
+          Explore users, products, carts, and order history served by MiniShop
           microservices through a single API Gateway.
         </p>
 
@@ -18,6 +18,12 @@ function HomePage() {
           <Link className="button button-secondary" to="/users">
             View users
           </Link>
+          <Link className="button button-secondary" to="/cart">
+            Open cart
+          </Link>
+          <Link className="button button-secondary" to="/orders">
+            View orders
+          </Link>
         </div>
       </div>
 
@@ -25,7 +31,10 @@ function HomePage() {
         <article className="feature-card">
           <span className="feature-number">01</span>
           <h2>Microservices</h2>
-          <p>Independent Java services for users, products, and routing.</p>
+          <p>
+            Independent Java services for users, products, carts, orders, and
+            routing.
+          </p>
         </article>
         <article className="feature-card">
           <span className="feature-number">02</span>

@@ -20,3 +20,15 @@ scrape_configs:
     static_configs:
       - targets:
           - product-service:8082
+
+  - job_name: cart-service
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - cart-service:8083
+
+  - job_name: order-service
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - order-service:8084

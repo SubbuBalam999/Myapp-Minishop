@@ -44,7 +44,7 @@ jvm_memory_used_bytes
 Select the Loki datasource and query the centralized application logs:
 
 ```logql
-{service=~"api-gateway|user-service|product-service"}
+{service=~"api-gateway|user-service|product-service|cart-service|order-service"}
 ```
 
 See `logging/README.md` for service-specific queries and verification steps.

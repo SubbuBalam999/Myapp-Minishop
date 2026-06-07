@@ -32,6 +32,11 @@ npm.cmd run dev
 
 Open `http://localhost:5173`.
 
+The frontend provides Home, Users, Products, Cart, and Orders pages. Cart items
+can be converted into an order for the selected shopper, and the Orders page
+shows order history. All API requests use `VITE_API_BASE_URL`, which should
+point to the API Gateway rather than an individual backend service.
+
 ## Build
 
 ```powershell

@@ -8,6 +8,8 @@ The API Gateway is a Java 21, Spring Boot 3, and Spring Cloud Gateway service. I
 | --- | --- |
 | `/api/users/**` | `http://localhost:8081` |
 | `/api/products/**` | `http://localhost:8082` |
+| `/api/cart/**` | `http://localhost:8083` |
+| `/api/orders/**` | `http://localhost:8084` |
 
 The destinations can be overridden with:
 
@@ -15,6 +17,8 @@ The destinations can be overridden with:
 | --- | --- |
 | `USER_SERVICE_URL` | `http://localhost:8081` |
 | `PRODUCT_SERVICE_URL` | `http://localhost:8082` |
+| `CART_SERVICE_URL` | `http://localhost:8083` |
+| `ORDER_SERVICE_URL` | `http://localhost:8084` |
 | `FRONTEND_URL` | `http://localhost:5173` |
 
 The gateway allows the configured frontend origin to call `/api/**` using
@@ -27,6 +31,8 @@ The gateway allows the configured frontend origin to call `/api/**` using
 - Maven 3.6.3 or later
 - User Service running on port `8081`
 - Product Service running on port `8082`
+- Cart Service running on port `8083`
+- Order Service running on port `8084`
 
 ## Run
 
@@ -44,7 +50,21 @@ cd C:\My-App\apps\product-service
 mvn spring-boot:run
 ```
 
-Start the API Gateway in a third PowerShell window:
+Start the Cart Service in another PowerShell window:
+
+```powershell
+cd C:\My-App\apps\cart-service
+mvn spring-boot:run
+```
+
+Start the Order Service in another PowerShell window:
+
+```powershell
+cd C:\My-App\apps\order-service
+mvn spring-boot:run
+```
+
+Start the API Gateway in another PowerShell window:
 
 ```powershell
 cd C:\My-App\apps\api-gateway
@@ -62,7 +82,7 @@ mvn test
 
 ## Manual Tests
 
-With all three services running:
+With all five services running:
 
 ```powershell
 Invoke-RestMethod http://localhost:8080/health
@@ -71,6 +91,8 @@ Invoke-WebRequest http://localhost:8080/actuator/prometheus
 
 Invoke-RestMethod http://localhost:8080/api/users
 Invoke-RestMethod http://localhost:8080/api/products
+Invoke-RestMethod http://localhost:8080/api/cart/1
+Invoke-RestMethod http://localhost:8080/api/orders
 
 $userBody = @{
     name = "Ada Lovelace"
@@ -96,8 +118,22 @@ Invoke-RestMethod `
     -ContentType "application/json" `
     -Body $productBody
 
+$cartBody = @{
+    userId = 1
+    productId = 1
+    quantity = 2
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+    -Method Post `
+    -Uri http://localhost:8080/api/cart/items `
+    -ContentType "application/json" `
+    -Body $cartBody
+
 Invoke-RestMethod http://localhost:8080/api/users/1
 Invoke-RestMethod http://localhost:8080/api/products/1
+Invoke-RestMethod http://localhost:8080/api/cart/1
+Invoke-RestMethod http://localhost:8080/api/orders/user/1
 ```
 
 ## Packaged Application
