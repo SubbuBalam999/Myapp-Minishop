@@ -4,50 +4,43 @@ server:
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
-      server:
-        webflux:
-          globalcors:
-            add-to-simple-url-handler-mapping: true
-            cors-configurations:
-              '[/**]':
-                allowedOrigins:
-                  - http://localhost:5173
-                allowedMethods:
-                  - GET
-                  - POST
-                  - PUT
-                  - DELETE
-                  - OPTIONS
-                allowedHeaders:
-                  - Content-Type
-                  - Authorization
-                  - Accept
-                allowCredentials: false
-          routes:
-            - id: user-service
-              uri: ${USER_SERVICE_URL:http://localhost:8081}
-              predicates:
-                - Path=/api/users/**
-            - id: product-service
-              uri: ${PRODUCT_SERVICE_URL:http://localhost:8082}
-              predicates:
-                - Path=/api/products/**
-          metrics:
-            enabled: true
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - http://localhost:5173
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - Content-Type
+              - Authorization
+              - Accept
+            allowCredentials: false
+
+      routes:
+        - id: user-service
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/users/**
+
+        - id: product-service
+          uri: ${PRODUCT_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/products/**
+
+      metrics:
+        enabled: true
 
 management:
   endpoints:
     web:
       exposure:
         include: health,prometheus
-  endpoint:
-    health:
-      access: unrestricted
-    prometheus:
-      access: unrestricted
-  prometheus:
-    metrics:
-      export:
-        enabled: true

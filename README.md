@@ -26,4 +26,14 @@ Stop the platform:
 docker compose down
 ```
 
-The frontend is available at `http://localhost:5173`.
+The local platform is available at:
+
+- Frontend: http://localhost:5173
+- Prometheus: http://localhost:9090
+- Prometheus targets: http://localhost:9090/targets
+- Loki readiness: http://localhost:3100/ready
+- Grafana: http://localhost:3000
+
+Grafana's Prometheus and Loki datasources are provisioned automatically. See
+`monitoring/README.md` for observability instructions and `logging/README.md`
+for centralized logging queries and verification.
