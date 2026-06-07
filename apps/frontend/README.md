@@ -32,10 +32,12 @@ npm.cmd run dev
 
 Open `http://localhost:5173`.
 
-The frontend provides Home, Users, Products, Cart, and Orders pages. Cart items
-can be converted into an order for the selected shopper, and the Orders page
-shows order history. All API requests use `VITE_API_BASE_URL`, which should
-point to the API Gateway rather than an individual backend service.
+The frontend provides Home, Users, Products, Cart, Orders, Inventory, and
+Payments pages. Cart items can be converted into an order, the Orders page
+shows history, the Inventory page shows stock by product ID, and the Payments
+page creates simulated payments for orders and supports refunds. All API
+requests use `VITE_API_BASE_URL`, which should point to the API Gateway rather
+than an individual backend service.
 
 ## Build
 

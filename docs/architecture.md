@@ -14,10 +14,9 @@ MiniShop is planned as a Java Spring Boot microservices e-commerce platform.
 - Payment Service
 - Notification Service
 
-The frontend reaches the User, Product, Cart, and Order services through the
-API Gateway. Each service owns its PostgreSQL database and exposes Actuator
-metrics to Prometheus. Promtail forwards service container logs to Loki for
-querying in Grafana.
+The frontend reaches the User, Product, Cart, Order, Inventory, and Payment
+services through the API Gateway. Each service owns its PostgreSQL database and
+exposes Actuator metrics to Prometheus. Promtail forwards service container
+logs to Loki for querying in Grafana.
 
-Inventory, payment, notification, and asynchronous messaging remain planned
-for later phases.
+Notification and asynchronous messaging remain planned for later phases.

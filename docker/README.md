@@ -1,8 +1,9 @@
 # MiniShop Docker Platform
 
 The Docker Compose stack runs PostgreSQL, the User Service, Product Service,
-Cart Service, Order Service, API Gateway, React frontend, Prometheus, Loki,
-Promtail, and Grafana on the shared `minishop-network`.
+Cart Service, Order Service, Inventory Service, Payment Service, API Gateway,
+React frontend, Prometheus, Loki, Promtail, and Grafana on the shared
+`minishop-network`.
 
 ## Configure
 
@@ -26,6 +27,8 @@ Open the services at:
 - Frontend: http://localhost:5173
 - Cart Service: http://localhost:8083
 - Order Service: http://localhost:8084
+- Inventory Service: http://localhost:8085
+- Payment Service: http://localhost:8086
 - Prometheus: http://localhost:9090
 - Prometheus targets: http://localhost:9090/targets
 - Loki readiness: http://localhost:3100/ready

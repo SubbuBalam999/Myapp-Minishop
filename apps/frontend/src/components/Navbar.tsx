@@ -6,6 +6,8 @@ const links = [
   { to: "/products", label: "Products" },
   { to: "/cart", label: "Cart" },
   { to: "/orders", label: "Orders" },
+  { to: "/inventory", label: "Inventory" },
+  { to: "/payments", label: "Payments" },
 ];
 
 function Navbar() {

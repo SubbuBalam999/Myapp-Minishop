@@ -46,6 +46,16 @@ spring:
           predicates:
             - Path=/api/orders/**
 
+        - id: inventory-service
+          uri: ${INVENTORY_SERVICE_URL:http://localhost:8085}
+          predicates:
+            - Path=/api/inventory/**
+
+        - id: payment-service
+          uri: ${PAYMENT_SERVICE_URL:http://localhost:8086}
+          predicates:
+            - Path=/api/payments/**
+
       metrics:
         enabled: true
 

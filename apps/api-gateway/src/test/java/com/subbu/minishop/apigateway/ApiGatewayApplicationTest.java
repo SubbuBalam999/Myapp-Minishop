@@ -25,6 +25,8 @@ class ApiGatewayApplicationTest {
     private static HttpServer productService;
     private static HttpServer cartService;
     private static HttpServer orderService;
+    private static HttpServer inventoryService;
+    private static HttpServer paymentService;
 
     @LocalServerPort
     private int port;
@@ -46,6 +48,12 @@ class ApiGatewayApplicationTest {
         orderService = startServer("/api/orders/1", """
                 {"id":1,"userId":1,"totalAmount":1999.98,"status":"CREATED"}
                 """);
+        inventoryService = startServer("/api/inventory/1", """
+                {"id":1,"productId":1,"availableQuantity":8,"reservedQuantity":2}
+                """);
+        paymentService = startServer("/api/payments/1", """
+                {"id":1,"orderId":1,"userId":1,"amount":299.99,"status":"SUCCESS","paymentMethod":"CARD"}
+                """);
     }
 
     @AfterAll
@@ -54,6 +62,8 @@ class ApiGatewayApplicationTest {
         productService.stop(0);
         cartService.stop(0);
         orderService.stop(0);
+        inventoryService.stop(0);
+        paymentService.stop(0);
     }
 
     @DynamicPropertySource
@@ -62,6 +72,14 @@ class ApiGatewayApplicationTest {
         registry.add("PRODUCT_SERVICE_URL", () -> "http://localhost:" + productService.getAddress().getPort());
         registry.add("CART_SERVICE_URL", () -> "http://localhost:" + cartService.getAddress().getPort());
         registry.add("ORDER_SERVICE_URL", () -> "http://localhost:" + orderService.getAddress().getPort());
+        registry.add(
+                "INVENTORY_SERVICE_URL",
+                () -> "http://localhost:" + inventoryService.getAddress().getPort()
+        );
+        registry.add(
+                "PAYMENT_SERVICE_URL",
+                () -> "http://localhost:" + paymentService.getAddress().getPort()
+        );
     }
 
     @Test
@@ -122,6 +140,38 @@ class ApiGatewayApplicationTest {
                 )
                 .expectBody()
                 .jsonPath("$.status").isEqualTo("CREATED");
+    }
+
+    @Test
+    void routesInventoryRequests() {
+        client().get()
+                .uri("/api/inventory/1")
+                .header(HttpHeaders.ORIGIN, "http://localhost:5173")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "http://localhost:5173"
+                )
+                .expectBody()
+                .jsonPath("$.availableQuantity").isEqualTo(8)
+                .jsonPath("$.reservedQuantity").isEqualTo(2);
+    }
+
+    @Test
+    void routesPaymentRequests() {
+        client().get()
+                .uri("/api/payments/1")
+                .header(HttpHeaders.ORIGIN, "http://localhost:5173")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals(
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "http://localhost:5173"
+                )
+                .expectBody()
+                .jsonPath("$.status").isEqualTo("SUCCESS")
+                .jsonPath("$.paymentMethod").isEqualTo("CARD");
     }
 
     @Test

@@ -60,6 +60,33 @@ export interface CreateOrderRequest {
   }>;
 }
 
+export interface InventoryRecord {
+  id: number;
+  productId: number;
+  availableQuantity: number;
+  reservedQuantity: number;
+  updatedAt: string;
+}
+
+export type PaymentStatus = "PENDING" | "SUCCESS" | "FAILED" | "REFUNDED";
+
+export interface PaymentRecord {
+  id: number;
+  orderId: number;
+  userId: number;
+  amount: number;
+  status: PaymentStatus;
+  paymentMethod: string;
+  createdAt: string;
+}
+
+export interface CreatePaymentRequest {
+  orderId: number;
+  userId: number;
+  amount: number;
+  paymentMethod: string;
+}
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
   timeout: 10000,
@@ -122,6 +149,45 @@ export async function createOrder(
   order: CreateOrderRequest,
 ): Promise<OrderRecord> {
   const response = await api.post<OrderRecord>("/api/orders", order);
+  return response.data;
+}
+
+export async function getInventory(
+  signal?: AbortSignal,
+): Promise<InventoryRecord[]> {
+  const response = await api.get<InventoryRecord[]>("/api/inventory", {
+    signal,
+  });
+  return response.data;
+}
+
+export async function getPayments(
+  signal?: AbortSignal,
+): Promise<PaymentRecord[]> {
+  const response = await api.get<PaymentRecord[]>("/api/payments", { signal });
+  return response.data;
+}
+
+export async function getPaymentsForOrder(
+  orderId: number,
+  signal?: AbortSignal,
+): Promise<PaymentRecord[]> {
+  const response = await api.get<PaymentRecord[]>(
+    `/api/payments/order/${orderId}`,
+    { signal },
+  );
+  return response.data;
+}
+
+export async function createPayment(
+  payment: CreatePaymentRequest,
+): Promise<PaymentRecord> {
+  const response = await api.post<PaymentRecord>("/api/payments", payment);
+  return response.data;
+}
+
+export async function refundPayment(id: number): Promise<PaymentRecord> {
+  const response = await api.post<PaymentRecord>(`/api/payments/${id}/refund`);
   return response.data;
 }
 

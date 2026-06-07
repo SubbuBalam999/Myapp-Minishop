@@ -7,8 +7,8 @@ function HomePage() {
         <div className="eyebrow">MiniShop Platform</div>
         <h1>A small storefront built for big engineering lessons.</h1>
         <p className="hero-copy">
-          Explore users, products, carts, and order history served by MiniShop
-          microservices through a single API Gateway.
+          Explore users, products, carts, orders, inventory, and simulated
+          payments through a single API Gateway.
         </p>
 
         <div className="hero-actions">
@@ -24,6 +24,12 @@ function HomePage() {
           <Link className="button button-secondary" to="/orders">
             View orders
           </Link>
+          <Link className="button button-secondary" to="/inventory">
+            View inventory
+          </Link>
+          <Link className="button button-secondary" to="/payments">
+            View payments
+          </Link>
         </div>
       </div>
 
@@ -32,8 +38,8 @@ function HomePage() {
           <span className="feature-number">01</span>
           <h2>Microservices</h2>
           <p>
-            Independent Java services for users, products, carts, orders, and
-            routing.
+            Independent Java services for users, products, carts, orders,
+            inventory, payments, and routing.
           </p>
         </article>
         <article className="feature-card">

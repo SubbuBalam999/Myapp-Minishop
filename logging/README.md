@@ -8,6 +8,8 @@ Grafana for querying logs. Promtail collects only these Compose services:
 - `product-service`
 - `cart-service`
 - `order-service`
+- `inventory-service`
+- `payment-service`
 
 ## Start logging
 
@@ -26,8 +28,9 @@ automatically provisioned **Loki** datasource, then run:
 ```
 
 Use the same query with `user-service` or `product-service` to inspect those
-logs. Use `cart-service` or `order-service` for commerce workflow logs. To view
-all collected MiniShop logs:
+logs. Use `cart-service`, `order-service`, `inventory-service`, or
+`payment-service` for commerce workflow logs. To view all collected MiniShop
+logs:
 
 ```logql
 {job="minishop"}
@@ -39,6 +42,8 @@ Generate traffic before querying if a service has not emitted logs yet:
 Invoke-WebRequest http://localhost:8080/actuator/health
 Invoke-WebRequest http://localhost:8081/actuator/health
 Invoke-WebRequest http://localhost:8082/actuator/health
+Invoke-WebRequest http://localhost:8085/actuator/health
+Invoke-WebRequest http://localhost:8086/actuator/health
 ```
 
 ## Verify the logging stack

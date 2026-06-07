@@ -10,6 +10,8 @@ The API Gateway is a Java 21, Spring Boot 3, and Spring Cloud Gateway service. I
 | `/api/products/**` | `http://localhost:8082` |
 | `/api/cart/**` | `http://localhost:8083` |
 | `/api/orders/**` | `http://localhost:8084` |
+| `/api/inventory/**` | `http://localhost:8085` |
+| `/api/payments/**` | `http://localhost:8086` |
 
 The destinations can be overridden with:
 
@@ -19,6 +21,8 @@ The destinations can be overridden with:
 | `PRODUCT_SERVICE_URL` | `http://localhost:8082` |
 | `CART_SERVICE_URL` | `http://localhost:8083` |
 | `ORDER_SERVICE_URL` | `http://localhost:8084` |
+| `INVENTORY_SERVICE_URL` | `http://localhost:8085` |
+| `PAYMENT_SERVICE_URL` | `http://localhost:8086` |
 | `FRONTEND_URL` | `http://localhost:5173` |
 
 The gateway allows the configured frontend origin to call `/api/**` using
@@ -33,6 +37,8 @@ The gateway allows the configured frontend origin to call `/api/**` using
 - Product Service running on port `8082`
 - Cart Service running on port `8083`
 - Order Service running on port `8084`
+- Inventory Service running on port `8085`
+- Payment Service running on port `8086`
 
 ## Run
 
@@ -64,6 +70,20 @@ cd C:\My-App\apps\order-service
 mvn spring-boot:run
 ```
 
+Start the Inventory Service in another PowerShell window:
+
+```powershell
+cd C:\My-App\apps\inventory-service
+mvn spring-boot:run
+```
+
+Start the Payment Service in another PowerShell window:
+
+```powershell
+cd C:\My-App\apps\payment-service
+mvn spring-boot:run
+```
+
 Start the API Gateway in another PowerShell window:
 
 ```powershell
@@ -82,7 +102,7 @@ mvn test
 
 ## Manual Tests
 
-With all five services running:
+With all services running:
 
 ```powershell
 Invoke-RestMethod http://localhost:8080/health
@@ -93,6 +113,8 @@ Invoke-RestMethod http://localhost:8080/api/users
 Invoke-RestMethod http://localhost:8080/api/products
 Invoke-RestMethod http://localhost:8080/api/cart/1
 Invoke-RestMethod http://localhost:8080/api/orders
+Invoke-RestMethod http://localhost:8080/api/inventory
+Invoke-RestMethod http://localhost:8080/api/payments
 
 $userBody = @{
     name = "Ada Lovelace"
@@ -134,6 +156,8 @@ Invoke-RestMethod http://localhost:8080/api/users/1
 Invoke-RestMethod http://localhost:8080/api/products/1
 Invoke-RestMethod http://localhost:8080/api/cart/1
 Invoke-RestMethod http://localhost:8080/api/orders/user/1
+Invoke-RestMethod http://localhost:8080/api/inventory/1
+Invoke-RestMethod http://localhost:8080/api/payments/order/1
 ```
 
 ## Packaged Application
